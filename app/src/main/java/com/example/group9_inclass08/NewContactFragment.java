@@ -10,8 +10,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.group9_inclass08.databinding.FragmentNewContactBinding;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,11 +76,67 @@ public class NewContactFragment extends Fragment {
         return binding.getRoot();
     }
 
+    String name;
+    String phone;
+    String email;
+    String phoneType = "";
+
+    EditText editTextName;
+    EditText editTextPhone;
+    EditText editTextEmail;
+    RadioGroup groupPhoneType;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         getActivity().setTitle(getResources().getString(R.string.new_contact));
+
+        editTextName = binding.editTextName;
+        editTextPhone = binding.editTextPhone;
+        editTextEmail = binding.editTextEmail;
+        groupPhoneType = binding.groupPhoneType;
+
+        String name_pattern = "^[a-zA-z ]*$";
+        String phone_pattern = "^\\d{3}-\\d{3}-\\d{4}$";
+        String email_pattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+        groupPhoneType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (R.id.radioButtonHome == i) {
+                    phoneType = "HOME";
+                }
+                else if (R.id.radioButtonCell == i) {
+                    phoneType = "CELL";
+                }
+                else if (R.id.radioButtonOffice == i) {
+                    phoneType = "OFFICE";
+                }
+            }
+        });
+
+        binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                name = editTextName.getText().toString();
+                phone = editTextPhone.getText().toString();
+                email = editTextEmail.getText().toString();
+
+                if (name.equals("") || !name.matches(name_pattern)) {
+                    Toast.makeText(getActivity(), "Please enter a valid name.", Toast.LENGTH_SHORT).show();
+                } else if (email.equals("") || !email.matches(email_pattern)) {
+                    Toast.makeText(getActivity(), "Please enter a valid email.", Toast.LENGTH_SHORT).show();
+                } else if (phone.equals("") || !phone.matches(phone_pattern)) {
+                    Toast.makeText(getActivity(), "Please enter a valid phone number.", Toast.LENGTH_SHORT).show();
+                } else if (phoneType.equals("")) {
+                    Toast.makeText(getActivity(), "Please enter a valid phone type", Toast.LENGTH_SHORT).show();
+                } else {
+
+                }
+            }
+        });
 
         binding.buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override

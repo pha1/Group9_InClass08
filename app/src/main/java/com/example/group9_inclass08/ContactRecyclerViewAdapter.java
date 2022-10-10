@@ -41,7 +41,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
         holder.textViewName.setText(contact.name);
         holder.textViewPhone.setText(contact.phone);
-        holder.textViewCid.setText(contact.cid);
     }
 
     @Override
@@ -57,7 +56,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
         TextView textViewName;
         TextView textViewPhone;
-        TextView textViewCid;
 
         View rootView;
         IContactRecycler iContactRecycler;
@@ -74,7 +72,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
             textViewName = itemView.findViewById(R.id.textViewRowName);
             textViewPhone = itemView.findViewById(R.id.textViewRowPhone);
-            textViewCid = itemView.findViewById(R.id.textViewRowCid);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

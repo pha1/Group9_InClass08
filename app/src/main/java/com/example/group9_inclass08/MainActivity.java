@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()) {
                     Log.d(TAG, "onResponse: " + Thread.currentThread().getId());
-                    /*
                     try {
                         JSONObject json = new JSONObject((response.body().string()));
                         JSONArray contactsJson = json.getJSONArray("contacts");
@@ -89,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                     */
                 } else {
                     Log.d(TAG, "onResponse: " + response);
                 }

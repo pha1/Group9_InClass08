@@ -83,16 +83,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
-    <EditText
-        android:id="@+id/editTextPhoneType"
+    <RadioGroup
+        android:id="@+id/groupPhoneType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/phone_type"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/editTextPhone"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddType">
+
+        <RadioButton
+            android:id="@+id/radioButtonHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/home" />
+
+        <RadioButton
+            android:id="@+id/radioButtonCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cell" />
+
+        <RadioButton
+            android:id="@+id/radioButtonOffice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/office" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textViewAddType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/phone_type"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/editTextPhone"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
