@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.group9_inclass08.databinding.FragmentContactDetailsBinding;
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +70,25 @@ public class ContactDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        TextView detailsName = binding.textViewName;
+        TextView detailsPhone = binding.textViewPhone;
+        TextView detailsEmail = binding.textViewEmail;
+        TextView detailsPhoneType = binding.textViewPhoneType;
+        TextView detailsCid = binding.textViewCid;
+
+        detailsName.setText(contact.name);
+        detailsPhone.setText(contact.phone);
+        detailsCid.setText(contact.cid);
+        detailsEmail.setText(contact.email);
+        detailsPhoneType.setText(contact.phoneType);
+
+        binding.buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                contactDetailsListener.back();
+            }
+        });
     }
 
     @Override

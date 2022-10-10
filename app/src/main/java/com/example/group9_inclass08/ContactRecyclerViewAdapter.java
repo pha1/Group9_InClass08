@@ -1,6 +1,7 @@
 package com.example.group9_inclass08;
 
 import android.graphics.drawable.Icon;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,10 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
         holder.textViewName.setText(contact.name);
         holder.textViewPhone.setText(contact.phone);
+
+        holder.contacts = contacts;
+        holder.contact = contact;
+        holder.position = position;
     }
 
     @Override
@@ -76,6 +81,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d(TAG, "onClick: " + position);
                     contact = contacts.get(position);
                     iContactRecycler.viewContact(contact);
                 }

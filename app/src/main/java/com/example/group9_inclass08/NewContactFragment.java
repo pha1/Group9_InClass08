@@ -133,7 +133,7 @@ public class NewContactFragment extends Fragment {
                 } else if (phoneType.equals("")) {
                     Toast.makeText(getActivity(), "Please enter a valid phone type", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    Toast.makeText(getActivity(), name + " " + phone + " " + phoneType, Toast.LENGTH_SHORT).show();
                 }
             }
         });

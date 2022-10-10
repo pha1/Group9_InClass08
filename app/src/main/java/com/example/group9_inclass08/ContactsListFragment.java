@@ -38,13 +38,11 @@ import okhttp3.Response;
 public class ContactsListFragment extends Fragment implements ContactRecyclerViewAdapter.IContactRecycler {
 
     FragmentContactsListBinding binding;
-
     final String TAG = "test";
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_CONTACTS = "contacts";
 
-    // TODO: Rename and change types of parameters
     private ArrayList<Contact> contacts = new ArrayList<>();
 
     public ContactsListFragment() {
@@ -99,6 +97,7 @@ public class ContactsListFragment extends Fragment implements ContactRecyclerVie
         adapter = new ContactRecyclerViewAdapter(contacts, this);
 
         recyclerViewContactsList.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerViewContactsList.setAdapter(adapter);
 
         binding.buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +127,6 @@ public class ContactsListFragment extends Fragment implements ContactRecyclerVie
 
     @Override
     public void viewContact(Contact contact) {
-
     }
 
     public interface ContactsListListener {

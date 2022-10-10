@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import okhttp3.Call;
@@ -27,11 +28,10 @@ import okhttp3.ResponseBody;
 public class MainActivity extends AppCompatActivity implements ContactsListFragment.ContactsListListener, NewContactFragment.NewContactListener, ContactDetailsFragment.ContactDetailsListener, ContactRecyclerViewAdapter.IContactRecycler {
 
     private final OkHttpClient client = new OkHttpClient();
-
     ActivityMainBinding binding;
     final String TAG = "test";
 
-    ArrayList<Contact> contacts = new ArrayList<>();
+    public static ArrayList<Contact> contacts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +40,24 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
         setContentView(binding.getRoot());
         setTitle(getResources().getString(R.string.contacts_title));
 
-        Log.d(TAG, "onCreate: Main Thread ID: " + Thread.currentThread().getId());
-
         getContacts();
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.containerView, ContactsListFragment.newInstance(contacts), "Contacts List")
-                .addToBackStack(null)
-                .commit();
 
     }
 
     public void getContacts() {
+        
         Log.d(TAG, "getContacts: Start");
+
         Request request = new Request.Builder()
                 .url("https://www.theappsdr.com/contacts/json")
                 .build();
 
+        Log.d(TAG, "getContacts: " + request);
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d(TAG, "onFailure: " + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -80,10 +78,12 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                             contact.email = contactJsonObject.getString("Email");
                             contact.phone = contactJsonObject.getString("Phone");
                             contact.phoneType = contactJsonObject.getString("PhoneType");
-
-                            contacts.add(contact);
                             Log.d(TAG, "onResponse: " + contact.name);
+                            contacts.add(contact);
                         }
+
+                        Log.d(TAG, "onResponse: Contacts: " + contacts.size());
+                        showContacts(contacts);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -91,9 +91,17 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                 } else {
                     Log.d(TAG, "onResponse: " + response);
                 }
+
             }
         });
         Log.d(TAG, "getContacts: Finish");
+    }
+
+    public void showContacts(ArrayList<Contact> contacts) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.containerView, ContactsListFragment.newInstance(contacts), "Contacts List")
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -116,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
      */
     @Override
     public void viewContact(Contact contact) {
+        Log.d(TAG, "viewContact: " + contact.name);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerView, ContactDetailsFragment.newInstance(contact), "Contact Details")
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
