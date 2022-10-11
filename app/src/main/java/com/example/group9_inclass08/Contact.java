@@ -1,3 +1,9 @@
+/**
+ * In Class 08
+ * Group9_InClass08
+ * Phi Ha
+ * Srinath Dittakavi
+ */
 package com.example.group9_inclass08;
 
 import android.os.Parcel;
