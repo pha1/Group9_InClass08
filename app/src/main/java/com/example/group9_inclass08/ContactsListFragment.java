@@ -95,18 +95,22 @@ public class ContactsListFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // RecyclerView
         recyclerViewContactsList = binding.recyclerViewContacts;
         recyclerViewContactsList.setHasFixedSize(true);
 
+        // LinearLayoutManager
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewContactsList.setLayoutManager(layoutManager);
 
+        // Custom Adapter
         adapter = new ContactRecyclerViewAdapter(contacts, (ContactRecyclerViewAdapter.IContactRecycler) getActivity());
 
+        // RecyclerView - line dividers
         recyclerViewContactsList.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         recyclerViewContactsList.setAdapter(adapter);
 
-
+        // Add Contact Button
         binding.buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +122,7 @@ public class ContactsListFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        // If the back button is used, the title is set back to "Contacts"
         getActivity().setTitle(getResources().getString(R.string.contacts_title));
     }
 

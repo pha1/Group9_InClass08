@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
         
         Log.d(TAG, "getContacts: Start");
 
+        // Request to contacts/json
         Request request = new Request.Builder()
                 .url("https://www.theappsdr.com/contacts/json")
                 .build();
@@ -69,18 +70,24 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                 e.printStackTrace();
             }
 
+            // Receive the response and create the contacts list
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()) {
                     contacts = new ArrayList<>();
                     Log.d(TAG, "onResponse: " + Thread.currentThread().getId());
                     try {
+                        // Receive the JSON Object from the response (Parse to String)
                         JSONObject json = new JSONObject((response.body().string()));
+
+                        // Get the JSON Array from the Object
                         JSONArray contactsJson = json.getJSONArray("contacts");
 
+                        // Loop the JSON Array within the JSON Object
                         for (int i = 0; i < contactsJson.length(); i++) {
                             JSONObject contactJsonObject = contactsJson.getJSONObject(i);
 
+                            // Create the Contact object
                             Contact contact = new Contact();
                             contact.cid = contactJsonObject.getInt("Cid");
                             contact.name = contactJsonObject.getString("Name");
@@ -88,10 +95,13 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                             contact.phone = contactJsonObject.getString("Phone");
                             contact.phoneType = contactJsonObject.getString("PhoneType");
                             Log.d(TAG, "onResponse: " + contact.name);
+
+                            // Add the Contact to the list
                             contacts.add(contact);
                         }
 
                         Log.d(TAG, "onResponse: Contacts: " + contacts.size());
+                        // Load the fragment with the updated array
                         showContacts(contacts);
 
                     } catch (JSONException e) {
@@ -106,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
         Log.d(TAG, "getContacts: Finish");
     }
 
+    /**
+     * Replace the current fragment with Contacts List fragment with updated contacts list
+     * @param contacts
+     */
     public void showContacts(ArrayList<Contact> contacts) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.containerView, ContactsListFragment.newInstance(contacts), "Contacts List")
@@ -113,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                 .commit();
     }
 
+    /**
+     * Replace current fragment with the New Contact fragment
+     */
     @Override
     public void newContact() {
         getSupportFragmentManager().beginTransaction()
@@ -121,18 +138,29 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                 .commit();
     }
 
+    /**
+     * POSTs to the provided URL, creating a contact via Form Body
+     * @param name
+     * @param email
+     * @param phone
+     * @param phoneType
+     */
     @Override
     public void createContact(String name, String email, String phone, String phoneType) {
 
+        // Form Body
         FormBody formBody = new FormBody.Builder()
+                // Add the form in correct order
                 .add("name", name)
                 .add("email", email)
                 .add("phone", phone)
                 .add("type", phoneType)
                 .build();
 
+        // Request
         Request request = new Request.Builder()
                 .url("https://www.theappsdr.com/contact/json/create")
+                // Post the Form Body in the request
                 .post(formBody)
                 .build();
 
@@ -142,6 +170,13 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
                 e.printStackTrace();
             }
 
+            /**
+             * When a response is received, get the Contacts which invokes showContacts,
+             * and replaces the current fragment with the Contacts List
+             * @param call
+             * @param response
+             * @throws IOException
+             */
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 getContacts();
@@ -149,11 +184,18 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
         });
     }
 
+    /**
+     * For cancel buttons, pop the back stack
+     */
     @Override
     public void cancel() {
         getSupportFragmentManager().popBackStack();
     }
 
+    /**
+     * Replace the fragment with the Details fragment, passing in the Contact object selected
+     * @param contact
+     */
     @Override
     public void viewContact(Contact contact) {
         getSupportFragmentManager().beginTransaction()
@@ -163,7 +205,8 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
     }
 
     /**
-     *
+     * Delete the Contact object selected by posting a Form Body with the id of the Contact
+     * This is for the delete button in the Recycler View
      * @param contact
      */
     @Override
@@ -190,11 +233,18 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
         });
     }
 
+    /**
+     * Back button, pop BackStack
+     */
     @Override
     public void back() {
         getSupportFragmentManager().popBackStack();
     }
 
+    /**
+     * Delete button in Details Page
+     * @param contact
+     */
     @Override
     public void deleteDetails(Contact contact) {
         FormBody formBody = new FormBody.Builder()

@@ -36,7 +36,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_row_item,parent, false);
-
         ContactViewHolder contactViewHolder = new ContactViewHolder(view, iContactRecycler);
 
         return contactViewHolder;
@@ -88,20 +87,24 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             textViewName = itemView.findViewById(R.id.textViewRowName);
             textViewPhone = itemView.findViewById(R.id.textViewRowPhone);
 
+            // On click for each list item
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "onClick: " + position);
                     Log.d(TAG, "onClick: " + contact.name);
+                    // Interface
                     iContactRecycler.viewContact(contact);
                 }
             });
 
+            // On click for Delete Button in the Recycler View
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "onClick: " + position);
                     contact = contacts.get(position);
+                    // Interface
                     iContactRecycler.deleteContact(contact);
                 }
             });

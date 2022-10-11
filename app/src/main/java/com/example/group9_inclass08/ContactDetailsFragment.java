@@ -30,11 +30,9 @@ public class ContactDetailsFragment extends Fragment {
 
     FragmentContactDetailsBinding binding;
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_CONTACT = "contact";
 
-    // TODO: Rename and change types of parameters
     private Contact contact;
 
     public ContactDetailsFragment() {
@@ -48,7 +46,6 @@ public class ContactDetailsFragment extends Fragment {
      * @param contact Parameter 1.
      * @return A new instance of fragment ContactDetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ContactDetailsFragment newInstance(Contact contact) {
         ContactDetailsFragment fragment = new ContactDetailsFragment();
         Bundle args = new Bundle();
@@ -83,12 +80,14 @@ public class ContactDetailsFragment extends Fragment {
         TextView detailsPhoneType = binding.textViewPhoneType;
         TextView detailsCid = binding.textViewCid;
 
+        // Set the values of the Contact Object
         detailsName.setText(contact.name);
         detailsPhone.setText(contact.phone);
         detailsCid.setText(String.valueOf(contact.cid));
         detailsEmail.setText(contact.email);
         detailsPhoneType.setText(contact.phoneType);
 
+        // Delete Button
         binding.buttonDeleteDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +95,7 @@ public class ContactDetailsFragment extends Fragment {
             }
         });
 
+        // Back Button
         binding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
