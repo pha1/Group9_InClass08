@@ -79,9 +79,16 @@ public class ContactDetailsFragment extends Fragment {
 
         detailsName.setText(contact.name);
         detailsPhone.setText(contact.phone);
-        detailsCid.setText(contact.cid);
+        detailsCid.setText(String.valueOf(contact.cid));
         detailsEmail.setText(contact.email);
         detailsPhoneType.setText(contact.phoneType);
+
+        binding.buttonDeleteDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                contactDetailsListener.deleteDetails(contact);
+            }
+        });
 
         binding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,5 +112,6 @@ public class ContactDetailsFragment extends Fragment {
 
     public interface ContactDetailsListener {
         void back();
+        void deleteDetails(Contact contact);
     }
 }

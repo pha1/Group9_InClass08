@@ -35,7 +35,7 @@ import okhttp3.Response;
  * Use the {@link ContactsListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ContactsListFragment extends Fragment implements ContactRecyclerViewAdapter.IContactRecycler {
+public class ContactsListFragment extends Fragment{
 
     FragmentContactsListBinding binding;
     final String TAG = "test";
@@ -84,6 +84,7 @@ public class ContactsListFragment extends Fragment implements ContactRecyclerVie
     LinearLayoutManager layoutManager;
     ContactRecyclerViewAdapter adapter;
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -94,10 +95,11 @@ public class ContactsListFragment extends Fragment implements ContactRecyclerVie
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewContactsList.setLayoutManager(layoutManager);
 
-        adapter = new ContactRecyclerViewAdapter(contacts, this);
+        adapter = new ContactRecyclerViewAdapter(contacts, (ContactRecyclerViewAdapter.IContactRecycler) getActivity());
 
         recyclerViewContactsList.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         recyclerViewContactsList.setAdapter(adapter);
+
 
         binding.buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,11 +127,16 @@ public class ContactsListFragment extends Fragment implements ContactRecyclerVie
 
     ContactsListListener contactsListListener;
 
-    @Override
-    public void viewContact(Contact contact) {
-    }
-
     public interface ContactsListListener {
         void newContact();
     }
+
+    public void updateList() {
+        adapter.notifyDataSetChanged();
+    }
+
+    public void updateArrayList(ArrayList<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
 }

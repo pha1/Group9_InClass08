@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,12 +56,14 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
     public interface IContactRecycler {
         void viewContact(Contact contact);
+        void deleteContact(Contact contact);
     }
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewName;
         TextView textViewPhone;
+        Button delete;
 
         View rootView;
         IContactRecycler iContactRecycler;
@@ -75,6 +78,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             rootView = itemView;
             this.iContactRecycler = iContactRecycler;
 
+            delete = itemView.findViewById(R.id.buttonDelete);
             textViewName = itemView.findViewById(R.id.textViewRowName);
             textViewPhone = itemView.findViewById(R.id.textViewRowPhone);
 
@@ -82,8 +86,17 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "onClick: " + position);
-                    contact = contacts.get(position);
+                    Log.d(TAG, "onClick: " + contact.name);
                     iContactRecycler.viewContact(contact);
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: " + position);
+                    contact = contacts.get(position);
+                    iContactRecycler.deleteContact(contact);
                 }
             });
         }

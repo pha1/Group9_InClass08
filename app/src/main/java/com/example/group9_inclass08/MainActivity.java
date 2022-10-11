@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
     final String TAG = "test";
 
     public static ArrayList<Contact> contacts = new ArrayList<>();
+    ContactsListFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()) {
+                    contacts = new ArrayList<>();
                     Log.d(TAG, "onResponse: " + Thread.currentThread().getId());
                     try {
                         JSONObject json = new JSONObject((response.body().string()));
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
 
     public void showContacts(ArrayList<Contact> contacts) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.containerView, ContactsListFragment.newInstance(contacts), "Contacts List")
+                .replace(R.id.containerView, ContactsListFragment.newInstance(contacts), "Contacts List")
                 .addToBackStack(null)
                 .commit();
     }
@@ -113,26 +116,99 @@ public class MainActivity extends AppCompatActivity implements ContactsListFragm
     }
 
     @Override
+    public void createContact(String name, String email, String phone, String phoneType) {
+
+        FormBody formBody = new FormBody.Builder()
+                .add("name", name)
+                .add("email", email)
+                .add("phone", phone)
+                .add("type", phoneType)
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://www.theappsdr.com/contact/json/create")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                getContacts();
+            }
+        });
+    }
+
+    @Override
     public void cancel() {
         getSupportFragmentManager().popBackStack();
     }
 
-    // TODO Check if this is needed?
+    @Override
+    public void viewContact(Contact contact) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerView, ContactDetailsFragment.newInstance(contact), "Details")
+                .addToBackStack(null)
+                .commit();
+    }
+
     /**
      *
      * @param contact
      */
     @Override
-    public void viewContact(Contact contact) {
-        Log.d(TAG, "viewContact: " + contact.name);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerView, ContactDetailsFragment.newInstance(contact), "Contact Details")
-                .addToBackStack(null)
-                .commit();
+    public void deleteContact(Contact contact) {
+
+        FormBody formBody = new FormBody.Builder()
+                .add("id", String.valueOf(contact.cid))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://www.theappsdr.com/contact/json/delete")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                getContacts();
+            }
+        });
     }
 
     @Override
     public void back() {
         getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void deleteDetails(Contact contact) {
+        FormBody formBody = new FormBody.Builder()
+                .add("id", String.valueOf(contact.cid))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://www.theappsdr.com/contact/json/delete")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                getContacts();
+            }
+        });
     }
 }
